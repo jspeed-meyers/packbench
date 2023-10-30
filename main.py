@@ -1,37 +1,43 @@
 import os
 
-import yaml
+import pandas as pd
 
-import check
+import assess
+import ingest
 
 # TODO: Experiment with shell diff
 # TODO: Experiment with BLEU score
+# TODO: Run melange and see if it builds
+# TODO: Run yam and see if it passes
+# TODO: Run wolfictl lint and see if it passes
+# TODO: Add testing
+# TODO: Add CI/CD test
+# TODO: Add pylint to CI CD
+# TODO: Add black to CI/CD
 
-EXPECTED = {}
-GOT = {}
+# list all file names in expected directory
+expected_filenames = os.listdir("test_expected") #.remove("README")
+results = []
+for filename in expected_filenames:
+    # collect path and filenames of matching expected and got files
+    expected_file = os.path.join("test_expected", filename)
+    got_file = os.path.join("test_got", filename)
+    # ingest melange YAML file pair
+    expected_myaml = ingest.mYAML(expected_file)
+    got_myaml = ingest.mYAML(got_file)
+    # compare the fields of the melange YAML file pair
+    assessment = assess.Assess(expected_myaml.fields, got_myaml.fields)
+    # add assessment to a list
+    results.append(assessment.output_dict())    
 
-EXPECTED_VALID_YAML = True
-GOT_VALID_YAML = True
+# convert JSON list to a pandas dataframe
+df = pd.DataFrame(results)
+
+#df = df.astype(int)
+
+# print dataframe descriptive statistics
+print(df)
+
+# output dataframe to CSV
 
 
-# TODO: create an open function that returns a dictionary
-with open("expected-go-bindata.yaml", "r") as stream:
-    try:
-        expected_dict = yaml.safe_load(stream)
-    except yaml.YAMLError as exc:
-        print(exc)
-        os.exit(1)
-
-    EXPECTED = check.parse_fields(expected_dict)
-
-
-with open("got-go-bindata.yaml", "r") as stream:
-    try:
-        got_dict = yaml.safe_load(stream)
-    except yaml.YAMLError as exc:
-        GOT_VALID_YAML = False
-
-    GOT = check.parse_fields(got_dict)
-    GOT["valid_yaml"] = GOT_VALID_YAML
-
-check.print_assessment(EXPECTED, GOT)
