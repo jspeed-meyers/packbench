@@ -11,7 +11,6 @@ import ingest
 # TODO: Run yam and see if it passes
 # TODO: Run wolfictl lint and see if it passes
 # TODO: Add CLI
-# TODO: Add testing
 # TODO: Add CI/CD test
 # TODO: Add pylint to CI CD
 # TODO: Add black to CI/CD
