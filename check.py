@@ -54,7 +54,7 @@ def key_melange_fields_exist(list_of_fields):
         "package.description",
         "environment.contents.packages",
         "pipeline",
-        "update.enabled",
+        #"update.enabled",
     ]
     for field in KEY_MELANGE_FIELDS:
         if field not in list_of_fields:
