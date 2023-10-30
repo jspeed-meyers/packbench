@@ -6,6 +6,8 @@ import yaml
 #       repository: https://github.com/cloudflare/cloudflared
 #       tag: ${{package.version}}
 #       expected-commit: 867360c8dd3dd5d88cfbcfcb7ad9b587a04ab82d
+# TODO: More generally, I need to make sure all potential fields
+# are ingested. How do I get a list?
 
 
 class mYAML:

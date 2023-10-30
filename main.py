@@ -10,6 +10,7 @@ import ingest
 # TODO: Run melange and see if it builds
 # TODO: Run yam and see if it passes
 # TODO: Run wolfictl lint and see if it passes
+# TODO: Add CLI
 # TODO: Add testing
 # TODO: Add CI/CD test
 # TODO: Add pylint to CI CD
@@ -33,11 +34,12 @@ for filename in expected_filenames:
 # convert JSON list to a pandas dataframe
 df = pd.DataFrame(results)
 
-#df = df.astype(int)
+# make True's equal to 1 and False's equal to 0
+df = df.replace({True: 1, False: 0})
 
 # print dataframe descriptive statistics
-print(df)
+for column in df.columns:
+    print(f"{column}: {df[column].mean()}")
 
 # output dataframe to CSV
-
-
+df.to_csv("results.csv", index=False, na_rep='NaN')
