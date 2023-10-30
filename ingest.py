@@ -1,13 +1,6 @@
-import yaml
+import os
 
-# TODO: add support for git-checkout
-#  uses: git-checkout
-#     with:
-#       repository: https://github.com/cloudflare/cloudflared
-#       tag: ${{package.version}}
-#       expected-commit: 867360c8dd3dd5d88cfbcfcb7ad9b587a04ab82d
-# TODO: More generally, I need to make sure all potential fields
-# are ingested. How do I get a list?
+import yaml
 
 
 class mYAML:
@@ -47,14 +40,29 @@ class mYAML:
         self.fields["env_packages"].sort()
 
         for pipeline in yaml_dict["pipeline"]:
-            if pipeline["uses"] == "fetch":
+            if "uses" in pipeline and pipeline["uses"] == "fetch":
                 self.fields["fetch_uri"] = pipeline["with"]["uri"]
                 self.fields["fetch_sha512"] = pipeline["with"]["expected-sha512"]
+            if "uses" in pipeline and pipeline["uses"] == "git-checkout":
+                self.fields["repository"] = pipeline["with"]["repository"]
+                self.fields["tag"] = pipeline["with"]["tag"]
+                self.fields["expected-commit"] = pipeline["with"]["expected-commit"]
 
         self.fields["strip_statement"] = False
         for pipeline in yaml_dict["pipeline"]:
-            if pipeline["uses"] == "strip":
+            if  "uses" in pipeline and pipeline["uses"] == "strip":
                 self.fields["strip_statement"] = True
+
+        if "update" in yaml_dict:
+            self.fields["update"] = True
+            if "github" in yaml_dict["update"]:
+                self.fields["github_identifier"] = yaml_dict["update"]["github"][
+                    "identifier"
+                ]
+                self.fields["strip-prefix"] = yaml_dict["update"]["github"][
+                    "strip-prefix"
+                ]
+
         self.fields["dict_fields"] = mYAML.collect_dict_fields(yaml_dict)
 
         self.fields["key_melange_fields_exist"] = mYAML.key_melange_fields_exist(

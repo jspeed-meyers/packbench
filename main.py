@@ -5,23 +5,26 @@ import pandas as pd
 import assess
 import ingest
 
-# TODO: Experiment with shell diff
-# TODO: Experiment with BLEU score
 # TODO: Run melange and see if it builds
 # TODO: Run yam and see if it passes
 # TODO: Run wolfictl lint and see if it passes
 # TODO: Add CLI
-# TODO: Add CI/CD test
-# TODO: Add pylint to CI CD
-# TODO: Add black to CI/CD
+# TODO: Experiment with shell diff
+# TODO: Experiment with BLEU score
+# TODO: Add pylint to CI/CD
+# TODO: Consider adding subpackage support
+
 
 # list all file names in expected directory
-expected_filenames = os.listdir("test_expected")  # .remove("README")
+expected_filenames = os.listdir("expected")
+# remove README (included to enable directory to be tracked by git)
+expected_filenames.remove("README")
+
 results = []
 for filename in expected_filenames:
     # collect path and filenames of matching expected and got files
-    expected_file = os.path.join("test_expected", filename)
-    got_file = os.path.join("test_got", filename)
+    expected_file = os.path.join("expected", filename)
+    got_file = os.path.join("got", filename)
     # ingest melange YAML file pair
     expected_myaml = ingest.mYAML(expected_file)
     got_myaml = ingest.mYAML(got_file)
