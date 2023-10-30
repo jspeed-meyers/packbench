@@ -17,7 +17,7 @@ import ingest
 # TODO: Add black to CI/CD
 
 # list all file names in expected directory
-expected_filenames = os.listdir("test_expected") #.remove("README")
+expected_filenames = os.listdir("test_expected")  # .remove("README")
 results = []
 for filename in expected_filenames:
     # collect path and filenames of matching expected and got files
@@ -29,7 +29,7 @@ for filename in expected_filenames:
     # compare the fields of the melange YAML file pair
     assessment = assess.Assess(expected_myaml.fields, got_myaml.fields)
     # add assessment to a list
-    results.append(assessment.output_dict())    
+    results.append(assessment.output_dict())
 
 # convert JSON list to a pandas dataframe
 df = pd.DataFrame(results)
@@ -42,4 +42,4 @@ for column in df.columns:
     print(f"{column}: {df[column].mean()}")
 
 # output dataframe to CSV
-df.to_csv("results.csv", index=False, na_rep='NaN')
+df.to_csv("results.csv", index=False, na_rep="NaN")

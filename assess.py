@@ -38,7 +38,7 @@ class Assess:
     def output_json(self):
         """Output assessment as JSON."""
         return json.dumps(self.assessment)
-    
+
     def output_dict(self):
         """Output assessment as JSON."""
-        return self.assessment  
+        return self.assessment
